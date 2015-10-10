@@ -4,6 +4,13 @@
 
 //DS3231 Real Time Clock
 #include "Wire.h"
+
+//For writing log values to the Arduino's internal memory (EEPROM)
+#include "EEPROM.h"
+/** the current address in the EEPROM (i.e. which byte we're going to write to next) **/
+int addr = 0;
+
+
 #define DS3231_I2C_ADDRESS 0x68
 // Convert normal decimal numbers to binary coded decimal
 byte decToBcd(byte val)
@@ -68,6 +75,11 @@ void loop() {
     Serial.print(" *C ");
     Serial.print(hif);
     Serial.println(" *F");
+    EEPROM.write(addr, f);
+    EEPROM.write(addr+1, t);
+    addr = addr + 2;
+    if(addr == EEPROM.length())
+        addr = 0;
 }
 
 void setDS3231time(byte second, byte minute, byte hour, byte dayOfWeek, byte
