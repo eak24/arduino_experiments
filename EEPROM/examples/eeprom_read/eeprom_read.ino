@@ -53,5 +53,5 @@ void loop()
     ++address &= EEPROM.length() - 1;
   ***/
 
-  delay(500);
+  delay(10);
 }
