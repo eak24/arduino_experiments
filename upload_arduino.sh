@@ -13,5 +13,6 @@ BAUDRATE=115200
 read -e -p "Enter the path to the hex file: " FILEPATH
 echo "ports available:"
 find /dev/ -name *.usb*
+read -e -p "Enter the path to the arduino: " PORTPATH
 
 /Users/ethankeller/Downloads/Arduino.app/Contents/Java/hardware/tools/avr/bin/avrdude -C/Users/ethankeller/Downloads/Arduino.app/Contents/Java/hardware/tools/avr/etc/avrdude.conf -v -patmega328p -carduino -P${PORTPATH} -b${BAUDRATE} -D -Uflash:w:${FILEPATH}:i
