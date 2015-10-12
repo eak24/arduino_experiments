@@ -10,7 +10,9 @@
 /** the current address in the EEPROM (i.e. which byte we're going to write to next) **/
 int addr = 0;
 uint8_t light_pin = 7;
+uint8_t humidity_pin = 12;
 relay_control light_relay(light_pin);
+relay_control humidity_control(humidity_pin);
 
 
 #define DS3231_I2C_ADDRESS 0x68
@@ -41,16 +43,19 @@ void setup() {
     setDS3231time(30,42,21,4,26,11,14);
 
     light_relay.begin();
+    humidity_control.begin();
 
 }
 
 void loop() {
     light_relay.on();
+    humidity_control.off();
 
     // Wait a few seconds between measurements.
     delay(2000);
 
     light_relay.off();
+    humidity_control.on();
 
     // Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
