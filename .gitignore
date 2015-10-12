@@ -26,3 +26,6 @@
 *.exe
 *.out
 *.app
+
+# CLION files
+.idea/*
