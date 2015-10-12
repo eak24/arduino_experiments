@@ -1,46 +1,22 @@
-/*
 //
-// Created by Ethan Keller on 10/10/15.
+// Created by Ethan Keller on 10/11/15.
 //
 
 #include "DS2321.h"
 
 #define DS3231_I2C_ADDRESS 0x68
-#define MIN_INTERVAL 2000
-
-DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
-    _pin = pin;
-    _type = type;
-    _bit = digitalPinToBitMask(pin);
-    _port = digitalPinToPort(pin);
-    _maxcycles = microsecondsToClockCycles(1000);  // 1 millisecond timeout for
-    // reading pulses from DHT sensor.
-    // Note that count is now ignored as the DHT reading algorithm adjusts itself
-    // basd on the speed of the processor.
-}
-
-void DHT::begin(void) {
-    // set up the pins!
-    pinMode(_pin, INPUT_PULLUP);
-    // Using this value makes sure that millis() - lastreadtime will be
-    // >= MIN_INTERVAL right away. Note that this assignment wraps around,
-    // but so will the subtraction.
-    _lastreadtime = -MIN_INTERVAL;
-    DEBUG_PRINT("Max clock cycles: "); DEBUG_PRINTLN(_maxcycles, DEC);
-}
-
+DS2321::DS2321() { };
 // Convert normal decimal numbers to binary coded decimal
-byte decToBcd(byte val)
+byte DS2321::decToBcd(byte val)
 {
     return( (val/10*16) + (val%10) );
 }
 // Convert binary coded decimal to normal decimal numbers
-byte bcdToDec(byte val)
+byte DS2321::bcdToDec(byte val)
 {
     return( (val/16*10) + (val%16) );
 }
-
-void setDS3231time(byte second, byte minute, byte hour, byte dayOfWeek, byte
+void DS2321::setTime(byte second, byte minute, byte hour, byte dayOfWeek, byte
 dayOfMonth, byte month, byte year)
 {
     // sets time and date data to DS3231
@@ -55,7 +31,8 @@ dayOfMonth, byte month, byte year)
     Wire.write(decToBcd(year)); // set year (0 to 99)
     Wire.endTransmission();
 }
-void readDS3231time(byte *second,
+
+void DS2321::readTime(byte *second,
                     byte *minute,
                     byte *hour,
                     byte *dayOfWeek,
@@ -76,11 +53,12 @@ void readDS3231time(byte *second,
     *month = bcdToDec(Wire.read());
     *year = bcdToDec(Wire.read());
 }
-void displayTime()
+
+void DS2321::displayTime()
 {
     byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
     // retrieve data from DS3231
-    readDS3231time(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month,
+    readTime(&second, &minute, &hour, &dayOfWeek, &dayOfMonth, &month,
                    &year);
     // send it to the serial monitor
     Serial.print(hour, DEC);
@@ -128,4 +106,3 @@ void displayTime()
             break;
     }
 }
-*/
